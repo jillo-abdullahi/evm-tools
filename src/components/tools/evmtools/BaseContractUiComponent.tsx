@@ -324,7 +324,7 @@ const BaseContractUiComponent = () => {
           />
         </div>
         {memoizedContracts.map((contract) => (
-          <TabsContent key={contract.id} value={contract.id}>
+          <TabsContent key={contract.id} value={contract.id} className="mt-0">
             <div className="flex flex-col sm:flex-row gap-2 mb-2 items-center">
               <Input
                 className="flex-1 sm:h-10"

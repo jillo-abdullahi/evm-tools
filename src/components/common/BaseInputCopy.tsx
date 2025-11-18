@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Input } from '@shadcn-components/ui/input';
 import { handleCopyClick } from '@utils/wallet';
+import { cn } from '@lib/utils';
 
 function SuccessCustomIcon() {
   return (
@@ -42,47 +43,47 @@ export default function InputBaseCopy(props: {
   disabled?: boolean;
   placeholder?: string;
 }) {
+  const [copied, setCopied] = useState(false);
+  const COPY_TIMEOUT = 2000;
+
+  const handleCopy = (e: React.MouseEvent) => {
+    if (!props.value) return;
+
+    if (props?.onClick) {
+      props.onClick(e);
+    } else {
+      handleCopyClick(props?.value ?? '');
+    }
+
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, COPY_TIMEOUT);
+  };
+
   return (
     <div className="w-full">
       <div className="relative">
         <Input
           type="string"
-          className="mt-4"
+          className="mt-4 pr-9"
           value={props.value}
           onChange={props?.onChange}
           disabled={props?.disabled}
           placeholder={props?.placeholder}
         />
         <button
-          data-copy-to-clipboard-target="npm-install-copy-button"
-          data-tooltip-target="tooltip-copy-npm-install-copy-button"
-          className="absolute end-2 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-2 inline-flex items-center justify-center"
-          onClick={(value) => {
-            if (props?.onClick) {
-              props.onClick(value);
-              return;
-            }
-            handleCopyClick(props?.value ?? '');
-          }}
+          className={cn(
+            'absolute end-2 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 rounded-sm p-1 inline-flex items-center justify-center',
+            props.value &&
+              'hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer',
+            !props.value && 'cursor-not-allowed opacity-50',
+          )}
+          onClick={handleCopy}
+          disabled={!props.value}
         >
-          <span id="default-icon">
-            <CopyCustomIcon />
-          </span>
-          <span id="success-icon" className="hidden inline-flex items-center">
-            <SuccessCustomIcon />
-          </span>
+          {copied ? <SuccessCustomIcon /> : <CopyCustomIcon />}
         </button>
-        <div
-          id="tooltip-copy-npm-install-copy-button"
-          role="tooltip"
-          className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
-        >
-          <span id="default-tooltip-message">Copy to clipboard</span>
-          <span id="success-tooltip-message" className="hidden">
-            Copied!
-          </span>
-          <div className="tooltip-arrow" data-popper-arrow></div>
-        </div>
       </div>
     </div>
   );

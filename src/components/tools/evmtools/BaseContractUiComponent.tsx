@@ -325,9 +325,9 @@ const BaseContractUiComponent = () => {
         </div>
         {memoizedContracts.map((contract) => (
           <TabsContent key={contract.id} value={contract.id}>
-            <div className="flex flex-col sm:flex-row gap-2 mb-2 items-center justify-center">
+            <div className="flex flex-col sm:flex-row gap-2 mb-2 items-center">
               <Input
-                className="mb-2 sm:mb-0 flex-1"
+                className="flex-1 sm:h-10"
                 value={contract.address}
                 onChange={(e) =>
                   handleAddressChange(contract.id, e.target.value)
@@ -339,8 +339,7 @@ const BaseContractUiComponent = () => {
                   variant="outline"
                   size="sm"
                   onClick={() => handleShare(contract.address)}
-                  className="mb-2 sm:mb-0 sm:h-10 sm:px-4"
-                  style={{ margin: '0px' }}
+                  className="sm:h-10 sm:px-4"
                   title={`Share link for ${contract.address.slice(
                     0,
                     6,
